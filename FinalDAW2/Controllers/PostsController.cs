@@ -1,4 +1,6 @@
 ﻿using FinalDAW2.Data;
+using FinalDAW2.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProiectDAW.Models;
 
@@ -8,9 +10,20 @@ namespace ProiectDAW.Controllers
     {
         private readonly ApplicationDbContext db;
 
-        public PostsController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        private readonly RoleManager<IdentityRole> _roleManager;
+
+        public PostsController( ApplicationDbContext context,
+                                UserManager<ApplicationUser> userManager,
+                                RoleManager<IdentityRole> roleManager
+                                )
         {
             db = context;
+
+            _userManager = userManager;
+
+            _roleManager = roleManager;
         }
         public IActionResult Index()
         {

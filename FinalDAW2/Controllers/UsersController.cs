@@ -2,7 +2,7 @@
 
 namespace FinalDAW2.Controllers
 {
-    public class ApplicationUsersController : Controller
+    public class UsersController : Controller
     {
         public IActionResult Index()
         {
