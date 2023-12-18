@@ -14,23 +14,14 @@
 }
 
 
-<div class="d-flex justify-content-center">
 
-    <a class="btn btn-outline-success" href="/Posts/New">Adauga articol</a>
-    <br />
-
-</div>
-
-<br />
-
-
-@foreach (FinalDAW2.Models.Post article in ViewBag.Posts)
+@foreach (FinalDAW2.Models.Post post in ViewBag.Posts)
 {
     <div class="card">
 
-        @Html.Partial("ArticleInfo", article)
+        @Html.Partial("PostInfo", post)
 
-        <a class="btn btn-success" href="/Posts/Show/@article.Id">Afisare articol</a>
+        <a class="btn btn-success" href="/Posts/Show/@post.Id">Afisare articol</a>
 
 
         @*

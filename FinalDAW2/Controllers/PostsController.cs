@@ -5,9 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FinalDAW2.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProiectDAW.Controllers
 {
+    [Authorize]
     public class PostsController : Controller
     {
         private readonly ApplicationDbContext db;
@@ -27,9 +29,10 @@ namespace ProiectDAW.Controllers
 
             _roleManager = roleManager;
         }
+        [Authorize(Roles = "User,Editor,Admin")]
         public IActionResult Index()
         {
-            var posts = db.Posts;
+            var posts = db.Posts.Include("User");
             ViewBag.Posts = posts;
 
             if (TempData.ContainsKey("message"))
@@ -44,8 +47,9 @@ namespace ProiectDAW.Controllers
         {
             return View();
         }
+        [Authorize(Roles = "User,Editor,Admin")]
 
-        public ActionResult Show(int id)
+        public IActionResult Show(int id)
         {
             Post postare = db.Posts.Include("User")
                                .Where(art => art.Id == id)
@@ -65,20 +69,23 @@ namespace ProiectDAW.Controllers
 
         [HttpPost]
         public IActionResult New(Post post)
-        {
+        {   
             post.DataPostarii = DateTime.Now;
+            post.UserId = _userManager.GetUserId(User);
 
             if (ModelState.IsValid)
             {
                 db.Posts.Add(post);
                 db.SaveChanges();
                 TempData["message"] = "Postarea a fost adaugata";
+                TempData["messageType"] = "alert-success";
                 return RedirectToAction("Index");
             }
             else
             {
                 return View(post);
             }
+
         }
 
 
