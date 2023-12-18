@@ -1,7 +1,7 @@
 ﻿using FinalDAW2.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace ProiectDAW.Models
+namespace FinalDAW2.Models
 {
     public class Group
     {

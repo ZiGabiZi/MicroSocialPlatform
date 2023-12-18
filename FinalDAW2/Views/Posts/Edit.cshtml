@@ -1,0 +1,25 @@
+﻿<h2>Editare Postare</h2>
+
+<form method="post" action="/Posts/Edit/@ViewBag.Post.Id">
+
+    <label>Titlu articol</label>
+    <br />
+
+    <input type="text" name="Title" value="@ViewBag.Post.Title" />
+    <br /><br />
+
+    <label>Continut Postare</label>
+    <br />
+
+    <input type="text" name="Content" value="@ViewBag.Post.Content" />
+    <br /><br />
+
+    <label>Data</label>
+    <br />
+
+    <input type="text" name="Date" value="@ViewBag.Post.Date" />
+    <br />
+
+    <button type="submit">Modifica postare</button>
+
+</form>

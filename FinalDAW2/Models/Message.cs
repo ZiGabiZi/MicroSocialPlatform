@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using FinalDAW2.Models;
 
-namespace ProiectDAW.Models
+namespace FinalDAW2.Models
 {
     public class Message
     {

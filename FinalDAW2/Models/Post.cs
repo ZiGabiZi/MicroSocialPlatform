@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ProiectDAW.Models
+namespace FinalDAW2.Models
 {
     public class Post
     {

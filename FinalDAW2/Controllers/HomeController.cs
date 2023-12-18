@@ -1,6 +1,5 @@
 ﻿using FinalDAW2.Models;
 using Microsoft.AspNetCore.Mvc;
-using ProiectDAW.Models;
 using System.Diagnostics;
 
 namespace ProiectDAW.Controllers

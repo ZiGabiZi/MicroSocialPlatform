@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using ProiectDAW.Models;
+using FinalDAW2.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace FinalDAW2.Models
@@ -18,7 +18,7 @@ namespace FinalDAW2.Models
         public virtual ICollection<Comment>? Comments { get; set; }
 
         // un user poate posta mai multe articole
-        public virtual ICollection<Post>? Articles { get; set; }
+        public virtual ICollection<Post>? Posts { get; set; }
 
         // un user poate fi in  mai multe articole
         public virtual ICollection<Group>? Groups { get; set; }

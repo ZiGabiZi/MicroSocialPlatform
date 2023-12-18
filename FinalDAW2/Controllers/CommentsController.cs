@@ -2,7 +2,6 @@
 using FinalDAW2.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using ProiectDAW.Models;
 
 namespace ProiectDAW.Controllers
 {
