@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FinalDAW2.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FinalDAW2.Controllers
 {
@@ -31,14 +32,23 @@ namespace FinalDAW2.Controllers
 
         public IActionResult Index()
         {
-            var users = from user in db.Users
-                        orderby user.UserName
-                        select user;
+            bool isAdmin = User.IsInRole("Admin");
+
+            // Dacă este admin, afișăm toți utilizatorii, altfel doar utilizatorul curent
+            var users = isAdmin
+                ? from user in db.Users
+                  orderby user.UserName
+                  select user
+                : from user in db.Users
+                  where user.UserName == User.Identity.Name
+                  orderby user.UserName
+                  select user;
 
             ViewBag.UsersList = users;
 
             return View();
         }
+
 
         public async Task<ActionResult> Show(string id)
         {
@@ -47,17 +57,53 @@ namespace FinalDAW2.Controllers
         }
 
 
+
+
+
         // Implementează acțiunile Index, Show, Edit și Delete așa cum ai nevoie pentru afișare și editare
         // Nu include logica pentru rolurile utilizatorilor, doar pentru editarea proprietății IsProfilePublic
 
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> EditProfile(string id)
         {
             ApplicationUser user = db.Users.Find(id);
-
+            //user.AllRoles = GetAllRoles();
+            if (user == null)
+            {
+                return NotFound();
+            }
             return View(user);
         }
 
         [HttpPost]
+        public async Task<IActionResult> EditProfile(string id, ApplicationUser newData)
+        {
+            ApplicationUser user = db.Users.Find(id);
+            if (ModelState.IsValid)
+            {
+                user.UserName = newData.UserName;
+                user.IsProfilePublic = newData.IsProfilePublic;
+                user.Email = newData.Email;
+                user.FirstName = newData.FirstName;
+                user.LastName = newData.LastName;
+                user.PhoneNumber = newData.PhoneNumber;
+
+                db.SaveChanges();
+            }
+            
+            return RedirectToAction("Index");
+        }
+
+
+        public async Task<ActionResult> Edit(string id)
+        {
+            ApplicationUser user = db.Users.Find(id);
+            //user.AllRoles = GetAllRoles();
+
+            return View(user);
+        }
+ 
+        [HttpPost]
+        
         public async Task<IActionResult> Edit(string id, ApplicationUser newData)
         {
             ApplicationUser user = db.Users.Find(id);
@@ -73,7 +119,7 @@ namespace FinalDAW2.Controllers
 
             return RedirectToAction("Index");
         }
-
+        
         [HttpPost]
         public IActionResult Delete(string id)
         {
@@ -108,6 +154,26 @@ namespace FinalDAW2.Controllers
             db.SaveChanges();
 
             return RedirectToAction("Index");
+        }
+
+
+        [NonAction]
+        public IEnumerable<SelectListItem> GetAllRoles()
+        {
+            var selectList = new List<SelectListItem>();
+
+            var roles = from role in db.Roles
+                        select role;
+
+            foreach (var role in roles)
+            {
+                selectList.Add(new SelectListItem
+                {
+                    Value = role.Id.ToString(),
+                    Text = role.Name.ToString()
+                });
+            }
+            return selectList;
         }
     }
 }

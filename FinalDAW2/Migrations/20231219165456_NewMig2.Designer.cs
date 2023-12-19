@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FinalDAW2.Data.Migrations
+namespace FinalDAW2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231218224548_NuMaiSuportE1NoapteaSiAmErori")]
-    partial class NuMaiSuportE1NoapteaSiAmErori
+    [Migration("20231219165456_NewMig2")]
+    partial class NewMig2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

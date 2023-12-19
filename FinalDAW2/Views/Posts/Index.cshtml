@@ -1,27 +1,29 @@
 ﻿@{
     ViewBag.Title = "Index";
 }
+<br />
+
+<h2 class="text-center">Afisare postari</h2>
 
 <br />
 
-<h2 class="text-center">Afisare articole</h2>
-
-<br />
-
-@if (ViewBag.Message != null)
+@if (TempData["message"] != null)
 {
-    <h2 class="alert-success p-3 rounded-3 text-center mb-5">@ViewBag.Message</h2>
+    <div class="alert @ViewBag.Alert p-3 rounded-3 text-center mb-5">
+        @ViewBag.Message
+    </div>
 }
 
+<br />
 
-
-@foreach (FinalDAW2.Models.Post post in ViewBag.Posts)
+@foreach (FinalDAW2.Models.Post postare in ViewBag.Posts)
 {
     <div class="card">
 
-        @Html.Partial("PostInfo", post)
+        @Html.Partial("PostInfo", postare )
 
-        <a class="btn btn-success" href="/Posts/Show/@post.Id">Afisare articol</a>
+
+        <a class="btn btn-success" href="/Posts/Show/@postare.Id">Afisare postare</a>
 
 
         @*
@@ -63,5 +65,3 @@
     <br />
     <br />
 }
-
-

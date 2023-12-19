@@ -1,25 +1,31 @@
-﻿<h2>Editare Postare</h2>
+﻿@model FinalDAW2.Models.Post
 
-<form method="post" action="/Posts/Edit/@ViewBag.Post.Id">
+<h2 class="text-center mt-5">Editare Postare</h2>
+<br />
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-3">
+            @using (Html.BeginForm(actionName: "Edit", controllerName: "Posts",
+            method: FormMethod.Post,
+            routeValues: new { id = Model.Id }))
+            {
+                /* @Html.HiddenFor(m => m.Id)  */
 
-    <label>Titlu articol</label>
-    <br />
 
-    <input type="text" name="Title" value="@ViewBag.Post.Title" />
-    <br /><br />
 
-    <label>Continut Postare</label>
-    <br />
 
-    <input type="text" name="Content" value="@ViewBag.Post.Content" />
-    <br /><br />
+                @Html.Label("Continut", "Continut Postare")
+                <br />
+                @Html.Editor("Continut", new { htmlAttributes = new { @class = "form-control" } })
 
-    <label>Data</label>
-    <br />
+                @Html.ValidationMessageFor(m => m.Continut, null, new { @class = "text-danger" })
+                <br />
 
-    <input type="text" name="Date" value="@ViewBag.Post.Date" />
-    <br />
+                <br />
 
-    <button type="submit">Modifica postare</button>
+                <button class="btn btn-sm btn-success" type="submit">Modifica postare</button>
 
-</form>
+            }
+        </div>
+    </div>
+</div>

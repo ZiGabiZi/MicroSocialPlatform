@@ -1,18 +1,50 @@
+/* Redimensionarea fontului */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
+/* Restul stilurilor */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
 }
+
+.field-validation-valid {
+    display: none;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+.navbar {
+    background-color: #f5f5f5 !important; /* Schimbarea culorii de fundal */
+    border: 1px solid #ddd; /* Adãugarea unui contur */
+    box-shadow: 0 2px 8px #aaa; /* Redimensionarea umbrei */
+}
+
+a.nav-link {
+    color: #333 !important; /* Schimbarea culorii link-urilor */
+}
+
+    a.nav-link:hover {
+        color: #00bcd4 !important; /* Schimbarea culorii la hover */
+    }
+
+.logoutbtn {
+    color: #333 !important; /* Schimbarea culorii butonului de logout */
+}
+
+    .logoutbtn:hover {
+        color: #00bcd4 !important; /* Schimbarea culorii la hover pentru butonul de logout */
+    }

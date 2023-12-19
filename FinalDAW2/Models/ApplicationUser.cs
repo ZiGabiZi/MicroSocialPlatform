@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using FinalDAW2.Models;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinalDAW2.Models
 {
@@ -25,5 +27,8 @@ namespace FinalDAW2.Models
 
         // un user poate posta mai multe mesaje
         public virtual ICollection<Message>? Messages { get; set; }
+
+        ///[NotMapped]
+        ///public IEnumerable<SelectListItem>? AllRoles { get; set; }
     }
 }

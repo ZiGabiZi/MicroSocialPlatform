@@ -124,7 +124,7 @@ namespace FinalDAW2.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
 
                     //PASUL 9 USERI SI ROLURI
-                    await _userManager.AddToRoleAsync(user, "Users");
+                    await _userManager.AddToRoleAsync(user, "User");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

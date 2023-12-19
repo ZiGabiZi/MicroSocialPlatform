@@ -2,9 +2,9 @@
 
 #nullable disable
 
-namespace FinalDAW2.Data.Migrations
+namespace FinalDAW2.Migrations
 {
-    public partial class MSP : Migration
+    public partial class NewMig2 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
