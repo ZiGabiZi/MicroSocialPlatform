@@ -29,7 +29,6 @@ namespace FinalDAW2.Controllers
 
 
 
-        // Adaugarea unui comentariu asociat unui articol in baza de date
         [HttpPost]
         public IActionResult New(Comment comm)
         {

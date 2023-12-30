@@ -14,6 +14,6 @@ namespace FinalDAW2.Models
         public virtual ICollection<ApplicationUser>? Users { get; set; }
 
 
-        public virtual ICollection<Message>? Messages { get; set; }
+        public virtual ICollection<Post>? Posts { get; set; }
     }
 }

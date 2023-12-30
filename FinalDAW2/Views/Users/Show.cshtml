@@ -13,12 +13,6 @@
 
             <p><i class="bi bi-envelope"></i> Prenume: @Model.FirstName</p>
 
-
-
-
-
-
-
         </div>
 
         <div class="d-flex flex-row justify-content-between p-3">
@@ -35,3 +29,23 @@
         </div>
     </div>
 </div>
+@if (Model.Posts != null && Model.Posts.Any() && (Model.IsProfilePublic == true || ViewBag.UserNume == Model.UserName || User.IsInRole("Admin")))
+{
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="card-title">User Posts</h5>
+            @foreach (var post in Model.Posts)
+            {
+                <div>
+                    <p>Post Content: @post.Continut</p>
+                    <p>Post Date: @post.DataPostarii</p>
+                    <!-- Add more post details as needed -->
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <p>No posts available for this user.</p>
+}

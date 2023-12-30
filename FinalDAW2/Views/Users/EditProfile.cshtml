@@ -6,7 +6,11 @@
 @using (Html.BeginForm(actionName: "EditProfile", controllerName: "Users",
         method: FormMethod.Post, routeValues: new { id = @Model.Id }))
 {
-
+    <label>Setează profilul:</label>
+    <select asp-for="IsProfilePublic">
+        <option value="true">Public</option>
+        <option value="false">Privat</option>
+    </select>
 
     <i class="bi bi-person"></i>
     @Html.Label("UserName", "Nume utilizator", new { @class = "" })

@@ -51,7 +51,7 @@ namespace FinalDAW2.Controllers
         [Authorize(Roles = "User,Admin")]
         public IActionResult Show(int id)
         {
-            SetAccessRights(); // Call the method to set ViewBag properties
+            SetAccessRights(); 
 
             Post postare = db.Posts.Include("User")
                                    .Include("Comments")
@@ -153,7 +153,6 @@ namespace FinalDAW2.Controllers
 
         }
 
-        // Se adauga articolul modificat in baza de date
 
         [HttpPost]
         [Authorize(Roles = "Admin,User")]

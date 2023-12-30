@@ -52,7 +52,21 @@ namespace FinalDAW2.Controllers
 
         public async Task<ActionResult> Show(string id)
         {
-            ApplicationUser user = db.Users.Find(id);
+            ViewBag.UserNume = _userManager.GetUserName(User);
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            ApplicationUser user = await db.Users
+                .Include(u => u.Posts)
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
             return View(user);
         }
 
@@ -60,12 +74,13 @@ namespace FinalDAW2.Controllers
 
 
 
-        // Implementează acțiunile Index, Show, Edit și Delete așa cum ai nevoie pentru afișare și editare
-        // Nu include logica pentru rolurile utilizatorilor, doar pentru editarea proprietății IsProfilePublic
+
+
 
         public async Task<ActionResult> EditProfile(string id)
         {
             ApplicationUser user = db.Users.Find(id);
+
             //user.AllRoles = GetAllRoles();
             if (user == null)
             {
@@ -97,7 +112,7 @@ namespace FinalDAW2.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             ApplicationUser user = db.Users.Find(id);
-            //user.AllRoles = GetAllRoles();
+
 
             return View(user);
         }
@@ -129,7 +144,7 @@ namespace FinalDAW2.Controllers
                          .Where(u => u.Id == id)
                          .First();
 
-            // Delete user comments
+
             if (user.Comments.Count > 0)
             {
                 foreach (var comment in user.Comments)
@@ -140,7 +155,7 @@ namespace FinalDAW2.Controllers
 
 
 
-            // Delete user articles
+
             if (user.Posts.Count > 0)
             {
                 foreach (var article in user.Posts)

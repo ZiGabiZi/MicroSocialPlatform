@@ -31,7 +31,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -57,4 +56,3 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 app.Run();
-//asfsaffas

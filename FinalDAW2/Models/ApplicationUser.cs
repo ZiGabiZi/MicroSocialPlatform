@@ -26,7 +26,6 @@ namespace FinalDAW2.Models
         public virtual ICollection<Group>? Groups { get; set; }
 
         // un user poate posta mai multe mesaje
-        public virtual ICollection<Message>? Messages { get; set; }
 
         ///[NotMapped]
         ///public IEnumerable<SelectListItem>? AllRoles { get; set; }
