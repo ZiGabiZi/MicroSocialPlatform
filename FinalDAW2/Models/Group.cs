@@ -11,7 +11,7 @@ namespace FinalDAW2.Models
         [Required(ErrorMessage = "Grupul trebuie sa aibe un nume")]
         public string Name { get; set; }
 
-        public virtual ICollection<ApplicationUser>? Users { get; set; }
+        public virtual ICollection<ApplicationUserGroup>? ApplicationUserGroups{ get; set; }
 
 
         public virtual ICollection<Post>? Posts { get; set; }

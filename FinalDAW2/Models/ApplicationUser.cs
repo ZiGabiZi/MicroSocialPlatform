@@ -23,11 +23,10 @@ namespace FinalDAW2.Models
         public virtual ICollection<Post>? Posts { get; set; }
 
         // un user poate fi in  mai multe articole
-        public virtual ICollection<Group>? Groups { get; set; }
+        public virtual ICollection<ApplicationUserGroup>? ApplicationUserGroups { get; set; }
 
         // un user poate posta mai multe mesaje
 
         ///[NotMapped]
-        ///public IEnumerable<SelectListItem>? AllRoles { get; set; }
     }
 }

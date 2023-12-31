@@ -32,17 +32,12 @@ namespace FinalDAW2.Controllers
 
         public IActionResult Index()
         {
-            bool isAdmin = User.IsInRole("Admin");
+            ViewBag.EsteAdmin = User.IsInRole("Admin");
 
             // Dacă este admin, afișăm toți utilizatorii, altfel doar utilizatorul curent
-            var users = isAdmin
-                ? from user in db.Users
-                  orderby user.UserName
-                  select user
-                : from user in db.Users
-                  where user.UserName == User.Identity.Name
-                  orderby user.UserName
-                  select user;
+            var users = from user in db.Users
+                        orderby user.UserName
+                        select user;
 
             ViewBag.UsersList = users;
 
@@ -53,6 +48,7 @@ namespace FinalDAW2.Controllers
         public async Task<ActionResult> Show(string id)
         {
             ViewBag.UserNume = _userManager.GetUserName(User);
+            ViewBag.EsteAdmin = User.IsInRole("Admin");
             if (id == null)
             {
                 return NotFound();

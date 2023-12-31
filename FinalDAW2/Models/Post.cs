@@ -14,6 +14,9 @@ namespace FinalDAW2.Models
 
 
         public DateTime DataPostarii { get; set; }
+
+        public string Image { get; set; }
+
         // Alte atribute relevante
         public string? UserId { get; set; }
 
