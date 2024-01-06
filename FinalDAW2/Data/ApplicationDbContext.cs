@@ -17,6 +17,8 @@ namespace FinalDAW2.Data
         public DbSet<ApplicationUserGroup> ApplicationUserGroups { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+        public DbSet<Friend> Friends { get; set; }
+
         // UPDATE 30.12.2023 CREARE RELATIE MANY TO MANY intre grup si user 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

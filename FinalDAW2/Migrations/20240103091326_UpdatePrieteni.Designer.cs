@@ -4,16 +4,18 @@ using FinalDAW2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FinalDAW2.Data.Migrations
+namespace FinalDAW2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240103091326_UpdatePrieteni")]
+    partial class UpdatePrieteni
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,6 +32,9 @@ namespace FinalDAW2.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -43,12 +48,6 @@ namespace FinalDAW2.Data.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsCurrentUserFollowing")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsCurrentUserPending")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsProfilePublic")
                         .HasColumnType("bit");
@@ -90,6 +89,8 @@ namespace FinalDAW2.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -153,39 +154,6 @@ namespace FinalDAW2.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("FinalDAW2.Models.Friend", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ReceiverId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderUsername")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Friends");
                 });
 
             modelBuilder.Entity("FinalDAW2.Models.Group", b =>
@@ -372,6 +340,13 @@ namespace FinalDAW2.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("FinalDAW2.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("FinalDAW2.Models.ApplicationUser", null)
+                        .WithMany("Friends")
+                        .HasForeignKey("ApplicationUserId");
+                });
+
             modelBuilder.Entity("FinalDAW2.Models.ApplicationUserGroup", b =>
                 {
                     b.HasOne("FinalDAW2.Models.Group", "Group")
@@ -404,13 +379,6 @@ namespace FinalDAW2.Data.Migrations
                     b.Navigation("Post");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("FinalDAW2.Models.Friend", b =>
-                {
-                    b.HasOne("FinalDAW2.Models.ApplicationUser", null)
-                        .WithMany("Friends")
-                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("FinalDAW2.Models.Post", b =>

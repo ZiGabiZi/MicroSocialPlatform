@@ -1,6 +1,18 @@
 ﻿<br />
 <br />
 
+<form method="GET">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control"
+               placeholder="Cauta utilizatori dupa UserName" name="search"
+               value="@ViewBag.UserList">
+        <button class="btn btn-outline-success"
+                type="submit">
+            Search
+        </button>
+    </div>
+</form>
+
 <div class="row">
 @foreach (var user in ViewBag.UsersList)
 {
@@ -34,7 +46,7 @@
                 </div>
                 <div class="d-flex flex-row justify-content-between p-3">
                         <div class="d-flex flex-row justify-content-between p-3">
-                            @if (ViewBag.EsteAdmin)
+                            @if (ViewBag.EsteAdmin || ViewBag.UserCurent == @user.Id)
                             {
                                 <div> <a class="btn btn-sm btn-success" href="/Users/EditProfile/@user.Id"> Editare profil</a> </div>
                             }

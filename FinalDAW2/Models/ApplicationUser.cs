@@ -13,20 +13,21 @@ namespace FinalDAW2.Models
         public string? LastName { get; set; }
 
         public string? FirstName { get; set; }
+        public bool IsCurrentUserFollowing { get; set; }
+        public bool IsCurrentUserPending { get; set; }
 
-        public List<ApplicationUser>? FriendList { get; set; } = new List<ApplicationUser>();
+        //Tabela cu lista de asteptare
+        public virtual ICollection<Friend>? Friends { get; set; }
 
-        // un user poate posta mai multe comentarii
+
+        // Un user poate posta mai multe comentarii
         public virtual ICollection<Comment>? Comments { get; set; }
 
-        // un user poate posta mai multe articole
+        // Un user poate posta mai multe articole
         public virtual ICollection<Post>? Posts { get; set; }
 
-        // un user poate fi in  mai multe articole
-        public virtual ICollection<ApplicationUserGroup>? ApplicationUserGroups { get; set; }
+        // Un user poate fi în mai multe grupuri
+        public virtual ICollection<ApplicationUserGroup>? ApplicationUserGroups { get; set; } 
 
-        // un user poate posta mai multe mesaje
-
-        ///[NotMapped]
     }
 }

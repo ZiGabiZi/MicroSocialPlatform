@@ -1,6 +1,9 @@
 ﻿@model FinalDAW2.Models.ApplicationUser
 
-
+@{
+    bool isCurrentUserFollowing = Model?.IsCurrentUserFollowing ?? false;
+    bool isCurrentUserPending = Model?.IsCurrentUserPending ?? false;
+}
 <div class="card mt-3" style="height:100%; width: 100%;">
 
     <div class="card-body d-flex justify-content-between flex-column">
@@ -16,7 +19,6 @@
         </div>
 
         <div class="d-flex flex-row justify-content-between p-3">
-            
             @if (ViewBag.EsteAdmin) /// TO DO sa te poti sterge pe tine 
             {
                 @using (Html.BeginForm(actionName: "Delete", controllerName: "Users", method: FormMethod.Post, routeValues: new { id = @Model.Id }))
@@ -26,26 +28,69 @@
 
                 }
             }
-        </div>
-    </div>
-</div>
-@if (Model.Posts != null && Model.Posts.Any() && (Model.IsProfilePublic == true || ViewBag.UserNume == Model.UserName || User.IsInRole("Admin")))
-{
-    <div class="card mt-3">
-        <div class="card-body">
-            <h5 class="card-title">User Posts</h5>
-            @foreach (var post in Model.Posts)
+            @if (ViewBag.UserNume != Model.UserName)
             {
-                <div>
-                    <p>Post Content: @post.Continut</p>
-                    <p>Post Date: @post.DataPostarii</p>
-                    <!-- Add more post details as needed -->
-                </div>
+                @if ((bool)(ViewBag.isCurrentUserFollowing ?? false) == false)
+                {
+                    @if (ViewBag.IsCurrentUserPending != null)
+                    {
+                        if (ViewBag.IsCurrentUserPending == 1)
+                        {
+                            <span>Cererea a fost deja trimisă</span>
+                        }
+                        else
+                        {
+                            <form method="post" action="/Users/AddFriend" id="addFriendForm">
+                                <input type="hidden" name="userId" value="@Model.Id" />
+                                <button type="submit" class="btn btn-primary">Adaugă ca și prieten</button>
+                            </form>
+                        }
+                    }
+                    else
+                    {
+                        <span>Sunteti deja prieteni</span>
+                        <!-- Aici poți adăuga cod pentru a afișa postările utilizatorului sau alte informații specifice prietenilor -->
+                    }
+                }
+                else
+                {
+                    <span>Sunteti deja prieteni buni</span>
+                }
+            }
+            @if ((bool)(ViewBag.isCurrentUserFollowing ?? false) == true)
+            {
+                <form method="post" action="/Users/RemoveFriend" id="removeFriendForm">
+                    <input type="hidden" name="friendId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-danger">Șterge prietenia</button>
+                </form>
             }
         </div>
     </div>
+</div>
+@if (Model.Posts != null && Model.Posts.Any() && (Model.IsProfilePublic == true || ViewBag.UserNume == Model.UserName || User.IsInRole("Admin") || ViewBag.isCurrentUserFollowing == true))
+{
+    @if (Model.Posts.Any())
+    {
+        <div class="card mt-3">
+            <div class="card-body">
+                <h5 class="card-title">User Posts</h5>
+                @foreach (var post in Model.Posts)
+                {
+                    <div>
+                        <p>Post Content: @post.Continut</p>
+                        <p>Post Date: @post.DataPostarii</p>
+                        <!-- Add more post details as needed -->
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else if (Model.Posts.Any() == false)
+    {
+        <p>NU EXISTA POSTARI PE ACEST CONT</p>
+    }
 }
 else
 {
-    <p>No posts available for this user.</p>
+    <p>ACEST CONT ESTE PRIVAT SI DACA VRETI SA VEDETI POSTARILE TREBUIE SA FITI PRIETENI</p>
 }

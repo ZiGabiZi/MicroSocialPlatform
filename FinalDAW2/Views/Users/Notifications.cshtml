@@ -1,0 +1,28 @@
+﻿@{
+    var friendRequests = ViewBag.FriendRequests as List<Friend>;
+}
+
+@if (friendRequests != null && friendRequests.Any())
+{
+    <h2>Notificări</h2>
+    foreach (var friendRequest in friendRequests)
+    {
+        <div>
+            <p>Utilizatorul cu ID-ul @friendRequest.SenderId dorește să vă adauge ca prieten.</p>
+            <form method="post" action="/Users/AcceptFriendRequest">
+                <input type="hidden" name="friendRequestId" value="@friendRequest.SenderId" />
+                <button type="submit"  class="btn btn-primary">Acceptă</button>
+            </form>
+
+            <form method="post" action="/Users/RejectFriendRequest">
+                <input type="hidden" name="friendRequestId" value="@friendRequest.SenderId" />
+                <button class="btn btn-danger" type="submit">Respinge</button>
+            </form>
+
+        </div>
+    }
+}
+else
+{
+    <p>Nicio notificare</p>
+}

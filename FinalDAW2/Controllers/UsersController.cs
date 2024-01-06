@@ -5,6 +5,8 @@ using FinalDAW2.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
+using NuGet.Protocol.Plugins;
 
 namespace FinalDAW2.Controllers
 {
@@ -33,16 +35,36 @@ namespace FinalDAW2.Controllers
         public IActionResult Index()
         {
             ViewBag.EsteAdmin = User.IsInRole("Admin");
+            ViewBag.UserCurent = _userManager.GetUserId(User);
 
-            // Dacă este admin, afișăm toți utilizatorii, altfel doar utilizatorul curent
             var users = from user in db.Users
                         orderby user.UserName
                         select user;
 
             ViewBag.UsersList = users;
 
+            var search = HttpContext.Request.Query["search"].ToString().Trim();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                List<string> usersIds = db.ApplicationUsers
+                                        .Where(at => at.UserName.Contains(search))
+                                        .Select(a => a.Id)
+                                        .ToList();
+
+                users = db.ApplicationUsers
+                        .Where(user => usersIds.Contains(user.Id))
+                        .OrderBy(a => a.UserName);
+
+                ViewBag.UsersList = users;
+                ViewBag.UserList = search;
+
+                ViewBag.PaginationBaseUrl = $"/Users/Index/?search={search}";
+            }
+
             return View();
         }
+
 
 
         public async Task<ActionResult> Show(string id)
@@ -63,9 +85,22 @@ namespace FinalDAW2.Controllers
                 return NotFound();
             }
 
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            var friendship = await db.Friends.FirstOrDefaultAsync(f =>
+            (f.SenderId == currentUser.Id && f.ReceiverId == user.Id && f.Status == 0) ||
+            (f.SenderId == user.Id && f.ReceiverId == currentUser.Id && f.Status == 0));
+
+            ViewBag.IsCurrentUserPending = friendship != null ? 1 : 0;
+
+            var followingFriendship = await db.Friends.FirstOrDefaultAsync(f =>
+            (f.SenderId == currentUser.Id && f.ReceiverId == user.Id && f.Status == 1) ||
+            (f.SenderId == user.Id && f.ReceiverId == currentUser.Id && f.Status == 1));
+
+            ViewBag.IsCurrentUserFollowing = followingFriendship != null;
+
             return View(user);
         }
-
 
 
 
@@ -161,11 +196,12 @@ namespace FinalDAW2.Controllers
             }
 
             db.ApplicationUsers.Remove(user);
-
+            // eroare la sters user
             db.SaveChanges();
 
             return RedirectToAction("Index");
         }
+
 
 
         [NonAction]
@@ -186,5 +222,125 @@ namespace FinalDAW2.Controllers
             }
             return selectList;
         }
+        // sistem de adaugat persoane ca si prieteni
+
+        [HttpPost]
+        public async Task<IActionResult> AddFriend(string userId)
+        {
+            // Obțineți utilizatorul curent
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            // Verificați dacă userId este valid și diferit de utilizatorul curent
+            if (userId != null && userId != currentUser.Id)
+            {
+                // Verificați dacă nu sunteți deja prieteni
+                var existingFriendship = await db.Friends
+                    .FirstOrDefaultAsync(f =>
+                        (f.SenderId == currentUser.Id && f.ReceiverId == userId) ||
+                        (f.SenderId == userId && f.ReceiverId == currentUser.Id));
+
+                if (existingFriendship == null)
+                {
+                    // Adăugați o nouă înregistrare în tabela Friend
+                    var newFriendship = new Friend
+                    {
+                        SenderId = currentUser.Id,
+                        ReceiverId = userId,
+                        Status = 0 // Starea poate varia în funcție de cerințele dvs.
+                    };
+                    var sender = await _userManager.FindByIdAsync(userId);
+
+                    var senderUsername = await _userManager.GetUserNameAsync(sender);
+
+                    newFriendship.SenderUsername = senderUsername;
+
+                    db.Friends.Add(newFriendship);
+                    await db.SaveChangesAsync();
+                }
+            }
+
+            // Redirectați către acțiunea Show pentru afișarea profilului utilizatorului
+            return RedirectToAction("Show", new { id = userId });
+        }
+
+
+        public IActionResult Notifications()
+        {
+            // Obțineți ID-ul utilizatorului curent (presupunând că utilizați ASP.NET Identity)
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Obțineți cererile de prietenie pentru utilizatorul curent
+            var friendRequests = db.Friends
+                .Where(f => f.ReceiverId == currentUserId && f.Status == 0)
+                .ToList();
+
+            // Utilizați ViewBag pentru a transmite lista de cereri de prietenie la view
+            ViewBag.FriendRequests = friendRequests;
+            Console.WriteLine("Notificari!");
+
+            return View();
+        }
+
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> AcceptFriendRequest(string friendRequestId)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            var friendRequest = await db.Friends
+                .FirstOrDefaultAsync(f =>
+                    f.ReceiverId == currentUser.Id && f.Status == 0 && f.SenderId == friendRequestId);
+
+            if (friendRequest != null)
+            {
+                friendRequest.Status = 1; // Actualizați starea în funcție de cerințele dvs.
+                await db.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> RejectFriendRequest(string friendRequestId)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var friendRequestToDelete = await db.Friends
+                    .FirstOrDefaultAsync(f =>
+                        f.SenderId == friendRequestId && f.ReceiverId == currentUser.Id && f.Status == 0);
+
+            if (friendRequestToDelete != null)
+            {
+                db.Friends.Remove(friendRequestToDelete);
+                await db.SaveChangesAsync();
+            }
+            return RedirectToAction("Notifications");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFriend(string friendId)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            // Găsește prietenia pentru a o șterge
+            var friendship = await db.Friends.FirstOrDefaultAsync(f =>
+                (f.SenderId == currentUser.Id && f.ReceiverId == friendId && f.Status == 1) ||
+                (f.SenderId == friendId && f.ReceiverId == currentUser.Id && f.Status == 1));
+
+            if (friendship != null)
+            {
+                db.Friends.Remove(friendship);
+                await db.SaveChangesAsync();
+            }
+
+            // Redirectează înapoi la acțiunea de profil sau altă pagină
+            return RedirectToAction("Show", new { id = friendId });
+        }
+
+
+
     }
 }

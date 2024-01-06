@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinalDAW2.Models
-{
+{   // tabela many to many intre Group si Application User
+    //TO DO (gabi) Controller so view
     public class ApplicationUserGroup
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

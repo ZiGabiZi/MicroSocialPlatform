@@ -4,16 +4,18 @@ using FinalDAW2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FinalDAW2.Data.Migrations
+namespace FinalDAW2.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240104143822_UpdatePrieteni5")]
+    partial class UpdatePrieteni5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,21 @@ namespace FinalDAW2.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("ApplicationUserApplicationUser", b =>
+                {
+                    b.Property<string>("FriendsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("WaitingListId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("FriendsId", "WaitingListId");
+
+                    b.HasIndex("WaitingListId");
+
+                    b.ToTable("ApplicationUserApplicationUser");
+                });
 
             modelBuilder.Entity("FinalDAW2.Models.ApplicationUser", b =>
                 {
@@ -153,39 +170,6 @@ namespace FinalDAW2.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
-                });
-
-            modelBuilder.Entity("FinalDAW2.Models.Friend", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ReceiverId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SenderUsername")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.ToTable("Friends");
                 });
 
             modelBuilder.Entity("FinalDAW2.Models.Group", b =>
@@ -372,6 +356,21 @@ namespace FinalDAW2.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ApplicationUserApplicationUser", b =>
+                {
+                    b.HasOne("FinalDAW2.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("FriendsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FinalDAW2.Models.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("WaitingListId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("FinalDAW2.Models.ApplicationUserGroup", b =>
                 {
                     b.HasOne("FinalDAW2.Models.Group", "Group")
@@ -404,13 +403,6 @@ namespace FinalDAW2.Data.Migrations
                     b.Navigation("Post");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("FinalDAW2.Models.Friend", b =>
-                {
-                    b.HasOne("FinalDAW2.Models.ApplicationUser", null)
-                        .WithMany("Friends")
-                        .HasForeignKey("ApplicationUserId");
                 });
 
             modelBuilder.Entity("FinalDAW2.Models.Post", b =>
@@ -484,8 +476,6 @@ namespace FinalDAW2.Data.Migrations
                     b.Navigation("ApplicationUserGroups");
 
                     b.Navigation("Comments");
-
-                    b.Navigation("Friends");
 
                     b.Navigation("Posts");
                 });
