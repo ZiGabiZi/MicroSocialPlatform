@@ -11,12 +11,13 @@
             @using (Html.BeginForm(actionName: "New", controllerName: "Posts",
             method: FormMethod.Post))
             {
+                   <input type="hidden" name="GroupId" value="@Model.GroupId">
 
-                @Html.Label("Continut", "Continut Postare")
+                @Html.ValidationMessage("Continut", null, new { @class = "text-danger" })
+                @Html.Label("Continut")
                 <br />
                 @Html.TextArea("Continut", null, new { @class = "form-control" })
 
-                @Html.ValidationMessage("Continut", null, new { @class = "text-danger" })
                 <br />
 
                 <br />
@@ -30,3 +31,5 @@
         </div>
     </div>
 </div>
+
+

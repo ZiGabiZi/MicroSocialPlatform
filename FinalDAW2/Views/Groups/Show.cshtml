@@ -1,0 +1,115 @@
+﻿@model FinalDAW2.Models.Group
+
+<h2 class="text-center mt-5">Detalii Grup</h2>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-6 offset-3">
+            <dl class="row">
+                <dt class="col-sm-3">Nume Grup:</dt>
+                <dd class="col-sm-9">@Model.Name</dd>
+
+                <dt class="col-sm-3">ID GRUP:</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Data Creării:</dt>
+                <dd class="col-sm-9">@Model.CreatedDate</dd>
+
+                <dt class="col-sm-3">Descriere:</dt>
+                <dd class="col-sm-9">@Model.Descriere</dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-3">
+    @if (!(bool)ViewBag.IsUserInGroup)
+    {
+        <form method="post" asp-action="JoinGroup" asp-controller="Groups" asp-route-groupId="@Model.Id">
+            <button type="submit" class="btn btn-primary mx-auto">Intră în Grup</button>
+        </form>
+    }
+
+    @if (ViewBag.IsUserInGroup)
+    {
+        <form method="post" asp-action="LeaveGroup" asp-controller="Groups" asp-route-groupId="@Model.Id">
+            <button type="submit" class="btn btn-danger mx-auto">Părăsește Grupul</button>
+        </form>
+    }
+
+    @if (ViewBag.EsteAdmin || ViewBag.IsUserInGroup == true )
+    {
+        <div class="container mt-3">
+            <div class="row">
+                <div class="col-12">
+                    <a asp-action="New" asp-controller="Posts" asp-route-groupId="@Model.Id" class="btn btn-primary mx-auto">Adaugă Postare în Grup</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    function redirectToNew(url) {
+        window.location.href = url;
+    }
+</script>
+
+
+<h3 class="text-center mt-4">Postări în Grup</h3>
+
+@if (Model.Posts != null && Model.Posts.Any())
+{
+    <div class="card-deck">
+        @foreach (var post in Model.Posts)
+        {
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Postare</h5>
+                    <div class="card">
+
+                        <div class="card-body">
+
+
+                            <div class="card-text">@post.Continut</div>
+
+                            <div class="d-flex justify-content-between flex-row mt-5">
+
+
+
+                                <span class="alert-success">@post.DataPostarii</span>
+
+                            </div>
+
+                        </div>
+
+
+                        <a class="btn btn-success" href="/Posts/Show/@post.Id">Afisare postare</a>
+
+
+
+                    </div>
+
+                    </div>
+                </div>
+           
+        }
+    </div>
+
+
+    <div class="card">
+
+        
+
+    </div>
+
+
+
+
+
+}
+else
+{
+    <p class="text-center mt-3">Momentan nu există postări în acest grup.</p>
+}
+

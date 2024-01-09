@@ -8,7 +8,7 @@
     foreach (var friendRequest in friendRequests)
     {
         <div>
-            <p>Utilizatorul cu ID-ul @friendRequest.SenderId dorește să vă adauge ca prieten.</p>
+            <p>Utilizatorul cu ID-ul @friendRequest.SenderUsername dorește să vă adauge ca prieten.</p>
             <form method="post" action="/Users/AcceptFriendRequest">
                 <input type="hidden" name="friendRequestId" value="@friendRequest.SenderId" />
                 <button type="submit"  class="btn btn-primary">Acceptă</button>

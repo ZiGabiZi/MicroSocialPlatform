@@ -1,0 +1,43 @@
+﻿@model IEnumerable<FinalDAW2.Models.Group>
+
+<h2 class="text-center mt-5">Lista Grupurilor</h2>
+
+<br />
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nume Grup</th>
+                        <th>Descriere</th>
+                        <th>Data Creării</th>
+                        <th>Acțiuni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var group in ViewBag.GroupsList)
+                    {
+                        <tr>
+                            <td>@group.Name</td>
+                            <td>@group.Descriere</td>
+                            <td>@group.CreatedDate</td>
+                            <td>
+                                    <a asp-action="Show" asp-route-id="@group.Id" class="btn btn-info">Detalii</a>
+                                @if (User.IsInRole("Admin") || group.UserId == ViewBag.UserId)
+                                {
+                                    <form method="post" asp-action="Delete" asp-route-id="@group.Id" class="d-inline">
+                                        <input type="submit" value="Șterge Grupul" class="btn btn-danger" onclick="return confirm('Sunteți sigur că doriți să ștergeți acest grup?')" />
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>

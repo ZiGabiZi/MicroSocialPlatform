@@ -10,6 +10,7 @@ namespace FinalDAW2.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Continutul articolului este obligatoriu")]
+        [StringLength(500, MinimumLength = 5, ErrorMessage = "Continutul articolului trebuie să aibă între 5 și 500 de caractere.")]
         public string Continut { get; set; }
 
 
@@ -19,6 +20,8 @@ namespace FinalDAW2.Models
 
         // Alte atribute relevante
         public string? UserId { get; set; }
+
+        public int? GroupId { get; set; }
 
         public virtual ApplicationUser? User { get; set; }
 

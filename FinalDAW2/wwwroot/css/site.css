@@ -28,7 +28,7 @@ body {
 }
 
 .navbar {
-    background-color: #f5f5f5 !important; /* Schimbarea culorii de fundal */
+    background-color: #D8BFD8 !important; /* Schimbarea culorii de fundal */
     border: 1px solid #ddd; /* Adãugarea unui contur */
     box-shadow: 0 2px 8px #aaa; /* Redimensionarea umbrei */
 }
@@ -42,7 +42,8 @@ a.nav-link {
     }
 
 .logoutbtn {
-    color: #333 !important; /* Schimbarea culorii butonului de logout */
+    font-weight: bold !important;
+    color: #964B00 !important; /* Maro */
 }
 
     .logoutbtn:hover {

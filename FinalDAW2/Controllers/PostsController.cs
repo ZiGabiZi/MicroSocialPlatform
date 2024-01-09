@@ -10,6 +10,7 @@ using System;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Linq;
+using Microsoft.Extensions.Hosting;
 
 namespace FinalDAW2.Controllers
 {
@@ -79,13 +80,13 @@ namespace FinalDAW2.Controllers
             var publicPosts = db.Posts
                 .Include(post => post.User)
                 .Where(post =>
-                    (post.User.IsProfilePublic && post.UserId != currentUserId && !friendIds.Contains(post.UserId)))
+                    (post.User.IsProfilePublic && post.UserId != currentUserId && !friendIds.Contains(post.UserId) && post.GroupId == null))
                 .ToList();
 
             // Obține toate postările relevante
             var allPosts = db.Posts
-                .Include("User")
-                .Where(post => friendIds.Contains(post.UserId) || (post.User.IsProfilePublic && post.UserId == currentUserId))
+            .Include("User")
+                .Where(post => (friendIds.Contains(post.UserId) || (post.User.IsProfilePublic && post.UserId == currentUserId)) && post.GroupId == null)
                 .ToList();
 
             // Aplică filtrarea și sortarea în memorie
@@ -156,23 +157,33 @@ namespace FinalDAW2.Controllers
                 return View(postare);
             }
         }
-       
+
 
         [Authorize(Roles = "Admin,User")]
-
-            public IActionResult New()
+        public IActionResult New(int? groupId)
         {
             Post postare = new Post();
+
+            // Verificați dacă groupId este furnizat și îl setați în modelul postare
+            if (groupId.HasValue)
+            {
+                postare.GroupId = groupId.Value;
+            }
 
             return View(postare);
         }
 
         [Authorize(Roles = "Admin,User")]
         [HttpPost]
-        public IActionResult New(Post post)
+        public IActionResult New(Post post, int? groupId)
         {
             post.DataPostarii = DateTime.Now;
             post.UserId = _userManager.GetUserId(User);
+
+            if(groupId != null)
+            {
+                post.GroupId = groupId;
+            }
 
             if (ModelState.IsValid)
             {
