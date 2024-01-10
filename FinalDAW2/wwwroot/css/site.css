@@ -1,4 +1,4 @@
-/* Redimensionarea fontului */
+﻿/* Redimensionarea fontului */
 html {
     font-size: 14px;
 }
@@ -26,11 +26,39 @@ body {
 .validation-summary-valid {
     display: none;
 }
+/* Adaugarea unor stiluri pentru a face butonul mai interesant si portocaliu */
+.btn-site {
+    background-color: #FFA500; /* Portocaliu */
+    border-color: #FFA500; /* Culoarea marginilor */
+    color: #fff; /* Culoarea textului */
+    transition: background-color 0.3s ease; /* Efect de tranziție */
+}
+
+.btn-site:hover {
+    background-color: #FF8C00; /* Schimbarea culorii la hover */
+    border-color: #FF8C00;
+}
+
+/* Adaugarea clasei custom btn-orange pentru a face butonul portocaliu */
+.btn-orange {
+    background-color: #FFA500; /* Portocaliu */
+    border-color: #FFA500; /* Culoarea marginilor */
+    color: #fff; /* Culoarea textului */
+    transition: background-color 0.3s ease; /* Efect de tranziție */
+}
+
+    .btn-orange:hover {
+        background-color: #FF8C00; /* Schimbarea culorii la hover */
+        border-color: #FF8C00;
+    }
+
 
 .navbar {
     background-color: #D8BFD8 !important; /* Schimbarea culorii de fundal */
-    border: 1px solid #ddd; /* Ad�ugarea unui contur */
+    border: 1px solid #ddd; /* Adăugarea unui contur */
     box-shadow: 0 2px 8px #aaa; /* Redimensionarea umbrei */
+    font-size: 16px;
+    font-weight: bold; /* Adăugarea efectului de bold */
 }
 
 a.nav-link {
@@ -47,5 +75,36 @@ a.nav-link {
 }
 
     .logoutbtn:hover {
-        color: #00bcd4 !important; /* Schimbarea culorii la hover pentru butonul�de�logout�*/
+        color: #00bcd4 !important; /* Schimbarea culorii la hover pentru butonul de logout */
     }
+
+.friend-request-notifications {
+    margin-top: 20px;
+}
+
+.friend-request-item {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+    .friend-request-item p {
+        margin-bottom: 10px;
+    }
+
+.no-notification {
+    margin-top: 20px;
+    color: #6c757d;
+}
+
+.no-nnnotification-container {
+    text-align: center;
+}
+
+.nnno-notification {
+    font-size: 40px;
+    margin-top: 20px;
+    color: #6c757d;
+}

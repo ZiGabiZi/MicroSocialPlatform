@@ -69,18 +69,47 @@
 </div>
 @if (Model.Posts != null && Model.Posts.Any() && (Model.IsProfilePublic == true || ViewBag.UserNume == Model.UserName || User.IsInRole("Admin") || ViewBag.isCurrentUserFollowing == true))
 {
-    @if (Model.Posts.Any())
+    @if (Model.Posts.Any() )
     {
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title">User Posts</h5>
                 @foreach (var post in Model.Posts)
                 {
-                    <div>
-                        <p>Post Content: @post.Continut</p>
-                        <p>Post Date: @post.DataPostarii</p>
-                        <!-- Add more post details as needed -->
-                    </div>
+                    @if (post.GroupId == null)
+                    {
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Postare</h5>
+                                <div class="card">
+
+                                    <div class="card-body">
+
+
+                                        <div class="card-text">@post.Continut</div>
+
+                                        <div class="d-flex justify-content-between flex-row mt-5">
+
+
+
+                                            <span class="alert-success">@post.DataPostarii</span>
+
+                                            <span class="alert-success">@post.User.UserName</span>
+
+                                        </div>
+
+                                    </div>
+
+
+                                    <a class="btn btn-success" href="/Posts/Show/@post.Id">Afisare postare</a>
+
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    }
                 }
             </div>
         </div>

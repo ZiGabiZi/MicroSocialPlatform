@@ -4,25 +4,28 @@
 
 @if (friendRequests != null && friendRequests.Any())
 {
-    <h2>Notificări</h2>
-    foreach (var friendRequest in friendRequests)
-    {
-        <div>
-            <p>Utilizatorul cu ID-ul @friendRequest.SenderUsername dorește să vă adauge ca prieten.</p>
-            <form method="post" action="/Users/AcceptFriendRequest">
-                <input type="hidden" name="friendRequestId" value="@friendRequest.SenderId" />
-                <button type="submit"  class="btn btn-primary">Acceptă</button>
-            </form>
+    <div class="friend-request-notifications">
+        <h2>Notificări</h2>
+        @foreach (var friendRequest in friendRequests)
+        {
+            <div class="friend-request-item">
+                <p>Utilizatorul <b> @friendRequest.SenderUsername </b> dorește să vă adauge ca prieten.</p>
+                <form method="post" action="/Users/AcceptFriendRequest">
+                    <input type="hidden" name="friendRequestId" value="@friendRequest.SenderId" />
+                    <button type="submit" class="btn btn-primary">Acceptă</button>
+                </form>
 
-            <form method="post" action="/Users/RejectFriendRequest">
-                <input type="hidden" name="friendRequestId" value="@friendRequest.SenderId" />
-                <button class="btn btn-danger" type="submit">Respinge</button>
-            </form>
-
-        </div>
-    }
+                <form method="post" action="/Users/RejectFriendRequest">
+                    <input type="hidden" name="friendRequestId" value="@friendRequest.SenderId" />
+                    <button class="btn btn-danger" type="submit">Respinge</button>
+                </form>
+            </div>
+        }
+    </div>
 }
 else
 {
-    <p>Nicio notificare</p>
+    <div class="no-nnnotification-container">
+        <p class="nnno-notification">Nu sunt notificari</p>
+    </div>
 }
