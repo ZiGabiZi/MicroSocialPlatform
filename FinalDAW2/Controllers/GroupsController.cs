@@ -67,7 +67,7 @@ namespace ProiectDAW.Controllers
         public IActionResult Show(int id)
         {
             SetAccessRights();
-            string userId = _userManager.GetUserId(User); // Salvăm UserId într-o variabilă locală
+            string userId = _userManager.GetUserId(User); 
 
             ViewBag.UserId = userId;
 
@@ -75,7 +75,6 @@ namespace ProiectDAW.Controllers
                                    .Where(g => g.Id == id)
                                    .FirstOrDefault();
 
-            // Verifică dacă utilizatorul curent este în grup
             bool isUserInGroup = db.ApplicationUserGroups.Any(ag => ag.GroupId == id && ag.UserId == userId);
             ViewBag.IsUserInGroup = isUserInGroup;
 
@@ -100,7 +99,6 @@ namespace ProiectDAW.Controllers
                 return NotFound();
             }
 
-            // Verificați dacă utilizatorul curent are dreptul de a șterge grupul
             if (!User.IsInRole("Admin") && group.UserId != _userManager.GetUserId(User))
             {
                 TempData["message"] = "Nu aveți dreptul să ștergeți acest grup.";
@@ -108,7 +106,6 @@ namespace ProiectDAW.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Ștergeți grupul și salvați schimbările în baza de date
             
             Group grup = db.Groups.Include("Posts")
                                          .Where(art => art.Id == id)
@@ -120,9 +117,6 @@ namespace ProiectDAW.Controllers
             TempData["messageType"] = "alert-success";
             return RedirectToAction("Index");
         }
-
-
-
 
 
         private void SetAccessRights()
@@ -152,13 +146,12 @@ namespace ProiectDAW.Controllers
 
             var currentUserId = _userManager.GetUserId(User);
 
-            // Verifică dacă utilizatorul este deja în grup
             var isUserInGroup = db.ApplicationUserGroups
                 .Any(ug => ug.UserId == currentUserId && ug.GroupId == groupId);
 
             if (!isUserInGroup)
             {
-                // Adaugă utilizatorul în grup
+                // Adauga utilizatorul în grup
                 var userGroup = new ApplicationUserGroup
                 {
                     UserId = currentUserId,
@@ -194,13 +187,11 @@ namespace ProiectDAW.Controllers
 
             var currentUserId = _userManager.GetUserId(User);
 
-            // Verifică dacă utilizatorul este în grup
             var isUserInGroup = db.ApplicationUserGroups
                 .Any(ug => ug.UserId == currentUserId && ug.GroupId == groupId);
 
             if (isUserInGroup)
             {
-                // Elimină utilizatorul din grup
                 var userGroup = db.ApplicationUserGroups.FirstOrDefault(ug => ug.UserId == currentUserId && ug.GroupId == groupId);
 
                 if (userGroup != null)

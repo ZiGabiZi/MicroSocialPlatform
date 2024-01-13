@@ -31,7 +31,7 @@ namespace FinalDAW2.Controllers
             _roleManager = roleManager;
         }
 
-
+        [Route("Useri")]
         public IActionResult Index()
         {
             ViewBag.EsteAdmin = User.IsInRole("Admin");
@@ -132,14 +132,15 @@ namespace FinalDAW2.Controllers
                 user.FirstName = newData.FirstName;
                 user.LastName = newData.LastName;
                 user.PhoneNumber = newData.PhoneNumber;
-
+                TempData["message"] = "Userul a fost Editat cu succes";
+                TempData["messageType"] = "alert-success";
                 db.SaveChanges();
             }
             
             return RedirectToAction("Index");
         }
 
-
+        [Route("EditUser")]
         public async Task<ActionResult> Edit(string id)
         {
             ApplicationUser user = db.Users.Find(id);
@@ -196,7 +197,6 @@ namespace FinalDAW2.Controllers
             }
 
             db.ApplicationUsers.Remove(user);
-            // eroare la sters user
             db.SaveChanges();
 
             return RedirectToAction("Index");
@@ -227,13 +227,10 @@ namespace FinalDAW2.Controllers
         [HttpPost]
         public async Task<IActionResult> AddFriend(string userId)
         {
-            // Obțineți utilizatorul curent
             var currentUser = await _userManager.GetUserAsync(User);
 
-            // Verificați dacă userId este valid și diferit de utilizatorul curent
             if (userId != null && userId != currentUser.Id)
             {
-                // Verificați dacă nu sunteți deja prieteni
                 var existingFriendship = await db.Friends
                     .FirstOrDefaultAsync(f =>
                         (f.SenderId == currentUser.Id && f.ReceiverId == userId) ||
@@ -241,12 +238,11 @@ namespace FinalDAW2.Controllers
 
                 if (existingFriendship == null)
                 {
-                    // Adăugați o nouă înregistrare în tabela Friend
                     var newFriendship = new Friend
                     {
                         SenderId = currentUser.Id,
                         ReceiverId = userId,
-                        Status = 0 // Starea poate varia în funcție de cerințele dvs.
+                        Status = 0 
                     };
                     var sender = await _userManager.FindByIdAsync(userId);
 
@@ -259,22 +255,18 @@ namespace FinalDAW2.Controllers
                 }
             }
 
-            // Redirectați către acțiunea Show pentru afișarea profilului utilizatorului
             return RedirectToAction("Show", new { id = userId });
         }
 
 
         public IActionResult Notifications()
         {
-            // Obțineți ID-ul utilizatorului curent (presupunând că utilizați ASP.NET Identity)
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Obțineți cererile de prietenie pentru utilizatorul curent
             var friendRequests = db.Friends
                 .Where(f => f.ReceiverId == currentUserId && f.Status == 0)
                 .ToList();
 
-            // Utilizați ViewBag pentru a transmite lista de cereri de prietenie la view
             ViewBag.FriendRequests = friendRequests;
             Console.WriteLine("Notificari!");
 
@@ -296,7 +288,7 @@ namespace FinalDAW2.Controllers
 
             if (friendRequest != null)
             {
-                friendRequest.Status = 1; // Actualizați starea în funcție de cerințele dvs.
+                friendRequest.Status = 1; 
                 await db.SaveChangesAsync();
             }
 
@@ -325,7 +317,7 @@ namespace FinalDAW2.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(User);
 
-            // Găsește prietenia pentru a o șterge
+            // pentru a o șterge prietenie
             var friendship = await db.Friends.FirstOrDefaultAsync(f =>
                 (f.SenderId == currentUser.Id && f.ReceiverId == friendId && f.Status == 1) ||
                 (f.SenderId == friendId && f.ReceiverId == currentUser.Id && f.Status == 1));
@@ -336,7 +328,6 @@ namespace FinalDAW2.Controllers
                 await db.SaveChangesAsync();
             }
 
-            // Redirectează înapoi la acțiunea de profil sau altă pagină
             return RedirectToAction("Show", new { id = friendId });
         }
 

@@ -13,16 +13,12 @@ namespace FinalDAW2.Models
             serviceProvider.GetRequiredService
             <DbContextOptions<ApplicationDbContext>>()))
             {
-                // Verificam daca in baza de date exista cel putin un rol
-                // insemnand ca a fost rulat codul
-                // De aceea facem return pentru a nu insera rolurileinca o data
-                // Acesta metoda trebuie sa se execute o singura data
+                
                 if (context.Roles.Any())
                 {
-                    return; // baza de date contine deja roluri
+                    return; 
                 }
-                // CREAREA ROLURILOR IN BD
-                // daca nu contine roluri, acestea se vor crea
+                
                 context.Roles.AddRange(
                 new IdentityRole
                 {
@@ -38,12 +34,10 @@ namespace FinalDAW2.Models
                     NormalizedName = "User".ToUpper()
                 }
                 );
-                // o noua instanta pe care o vom utiliza pentru crearea parolelor utilizatorilor
-                // parolele sunt de tip hash
+               
 
                 var hasher = new PasswordHasher<ApplicationUser>();
-                // CREAREA USERILOR IN BD
-                // Se creeaza cate un user pentru fiecare rol
+             
                 context.Users.AddRange(
                 new ApplicationUser
 

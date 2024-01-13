@@ -26,8 +26,6 @@ namespace FinalDAW2.Models
         public virtual Post? Post { get; set; }
 
 
-        // Navigation properties???
-
     }
 
 }

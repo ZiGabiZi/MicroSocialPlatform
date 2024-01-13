@@ -9,8 +9,8 @@ namespace FinalDAW2.Models
         [Key] 
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Continutul articolului este obligatoriu")]
-        [StringLength(500, MinimumLength = 5, ErrorMessage = "Continutul articolului trebuie să aibă între 5 și 500 de caractere.")]
+        [Required(ErrorMessage = "Continutul Postarii este obligatoriu")]
+        [StringLength(500, MinimumLength = 5, ErrorMessage = "Continutul Postarii trebuie să aibă între 5 și 500 de caractere.")]
         public string Continut { get; set; }
 
 
@@ -29,7 +29,7 @@ namespace FinalDAW2.Models
         public virtual ICollection<Comment>? Comments { get; set; }
 
 
-        // Relație cu Utilizator
+       
 
     }
 }
